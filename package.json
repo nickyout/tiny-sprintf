@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Tiny but complete implementation",
   "main": "sprintf.js",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/nickyout/tiny-sprintf.git"
+  },
   "directories": {
     "test": "test"
   },
