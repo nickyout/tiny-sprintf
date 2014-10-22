@@ -30,7 +30,7 @@ Stuff like this:
 
 Possible with this (for the values of each line):
 
-```
+```javascript
 sprintf("  %-5.5s %-'.-11.11s %-25.25s", name, type, description);
 ```
 
@@ -38,7 +38,7 @@ So if you want that stuff in the console or anywhere in your application, you ca
 
 ## Format
 The full format (where `[]` means optional element) is:
-```
+```javascript
 "%[+][index$]['padchar][-][minWidth][.maxWidth]type"
 ```
 Explanation of elements:
@@ -76,7 +76,7 @@ Punch functions into the `sprintf` function under the same property as the type 
 
 For example, adding `d` (typecast to Number, add plus if desired) is like: 
 
-```
+```javascript
 sprintf.d = function(value, plusChar) {
     return (plusChar || '') + (+value);
 };
@@ -85,7 +85,7 @@ sprintf.d = function(value, plusChar) {
 Most times, you will not need `plusChar`. 
 
 ## Examples
-```
+```javascript
 sprintf.d = function(value, plusChar) {
     return (plusChar || '') + (+value);
 };
