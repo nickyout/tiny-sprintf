@@ -41,7 +41,7 @@ Explanation of elements:
     *   Does typecasting on the value before it is converted to string. Most of the times, you will probably just want to use `s`
 
 ## Adding conversion types
-Punch functions into the `sprintf` method under the same property as the type character. Expect args `value, plusChar` and return the value in the desired format. You don't have to convert it to string. 
+Punch functions into the `sprintf` function under the same property as the type character. Expect args `value, plusChar` and return the value in the desired format. You don't have to convert it to string. 
 
 For example, adding `d` (typecast to Number, add plus if desired) is like: 
 
