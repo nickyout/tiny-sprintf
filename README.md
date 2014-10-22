@@ -5,6 +5,37 @@ Tiny but complete.
 *   Is only 550B minified (I guess that's even less gzipped). 
 *   By default only supports conversion type `s`, but that can be easily extended. I don't really see why you need these conversions when everything gets typecasted to string anyway. 
 
+## Install
+
+```
+npm install tiny-sprintf
+```
+
+## What does it do
+
+It makes it easy to create monospace text with indenting and alignment. 
+
+Stuff like this:
+
+```
+   name  type        description
+   ===== =========== ========================
+   a     value...... contains nothing
+   ab    property... is important
+   abc   method..... deprecated
+   test  method..... unused
+   toolo method..... too long
+   metho method..... method with cut off name
+```
+
+Possible with this (for the values of each line):
+
+```
+sprintf("  %-5.5s %-'.-11.11s %-25.25s", name, type, description);
+```
+
+So if you want that stuff in the console or anywhere in your application, you can use sprintf. 
+
 ## Format
 The full format (where `[]` means optional element) is:
 ```
@@ -86,4 +117,10 @@ sprintf('%%', 1); // '%'
 sprintf('%T', 'abc'); // 'T'
 ```
 
+## Run tests
+
+Enter the sprintf directory, run `npm install` then run `npm test`. It uses [Grunt][grunt], so make sure you have that installed. That, or run [nodeunit][nunit] on the file `./test/sprintf.js` directly. 
+
 [php]: http://php.net/manual/en/function.sprintf.php "Php sprintf"
+[grunt]: http://gruntjs.com/getting-started "Grunt getting started"
+[nunit]: https://github.com/caolan/nodeunit "Nodeunit on Github"
