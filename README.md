@@ -3,7 +3,7 @@ Tiny but complete.
 
 *   Implements sprintf based on the [php doc][php]. They have some nice examples. 
 *   Is only 550B minified (I guess that's even less gzipped). 
-*   By default only supports conversion type `s`, but that can be easily extended. I don't really when you need these conversions when everything gets typecasted to string anyway. 
+*   By default only supports conversion type `s`, but that can be easily extended. I don't really see why you need these conversions when everything gets typecasted to string anyway. 
 
 ## Format
 The full format (where `[]` means optional element) is:
