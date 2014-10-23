@@ -59,26 +59,27 @@
  */
 var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 	s = function(str) {
-		var value,
+		var length = 'length',
+			substr = 'substr',
+			lastIndex = 'lastIndex',
+			value,
 			index = 1,
 			execMatch,
-			plusChar,
 			argIndex,
 			padChar,
 			leftAlign,
 			minDist,
-			maxDist,
-			type;
+			maxDist;
 		while (execMatch = r.exec(str)) {
-			plusChar = execMatch[1];
-			type = execMatch[7];
+			var plusChar = execMatch[1],
+				type = execMatch[7],
+				typeLowerCase = type.toLowerCase();
 
-			if (type in s) {
+			if (s[typeLowerCase]) {
 				// arg from index
-				if ((argIndex = execMatch[2]) && argIndex[(value = argIndex.length - 1)] == "$") {
-					argIndex = argIndex.substr(0, value);
+				if ((argIndex = execMatch[2]) && argIndex[(value = argIndex[length] - 1)] == "$") {
+					argIndex = argIndex[substr](0, value);
 				}
-				value = arguments[argIndex || index];
 
 				// pad char
 				if (padChar = execMatch[3]) {
@@ -93,30 +94,35 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 				minDist = execMatch[5];
 
 				// cutoff
-				if ((maxDist = execMatch[6]) && maxDist[0] == '.' && maxDist.substr(1)) {
-					maxDist = maxDist.substr(1);
+				if ((maxDist = execMatch[6]) && maxDist[0] == '.' && maxDist[substr](1)) {
+					maxDist = maxDist[substr](1);
 				}
+				value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar) + '';
 
-				if (s[type]) {
-					value = s[type](value, plusChar);
-				}
-				value += '';
-				if (minDist) while (value.length < minDist) {
+				if (minDist) while (value[length] < minDist) {
 					value = leftAlign ? (value + padChar) : (padChar + value);
 				}
-				if (maxDist && value.length > maxDist) {
-					value = leftAlign ? value.substr(0, maxDist) : value.substr(value.length - maxDist);
+				if (maxDist && value[length] > maxDist) {
+					value = leftAlign ? value[substr](0, maxDist) : value[substr](value[length] - maxDist);
 				}
 				index++;
 			} else {
 				value = type;
 			}
-			str = str.substr(0, execMatch.index) + value + str.substr(r.lastIndex);
-			r.lastIndex = value.length + execMatch.index;
+			str = str[substr](0, plusChar = execMatch.index) + value + str[substr](r[lastIndex]);
+			r[lastIndex] = value[length] + plusChar;
 		}
 		return str;
 	};
 
-s.s = null;
+/**
+ * Returns value only if lowercase s.
+ * @param {*} value
+ * @param {Boolean} caps
+ * @returns {String}
+ */
+s.s=function(value, caps) {
+	return caps ? '%S' : value;
+};
 
 module.exports = s;
