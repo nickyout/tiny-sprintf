@@ -2,7 +2,7 @@ var path = require('path'),
 	fs = require('fs'),
 	UglifyJS = require("uglify-js"),
 	typeReplace = /module\.exports\s*=\s*/,
-	regFalse = /^(false|0|no|nein|nee|non)$/i,
+	regFalse = /^(false|0|no)$/i,
 	srcReplace = "/* type entry */",
 	srcPath = 'src/sprintf.js',
 	typeGlobPath = 'src/?.js',
@@ -22,7 +22,7 @@ module.exports = function(grunt, ROOT) {
 		 * <code>"no"</code> to disable
 		 */
 		"execute": function(types, destPath, doMinify) {
-			types || (types = null);
+			types = types ? '' : types.toLowerCase();
 			destPath || (destPath = destFolderDefault);
 			doMinify = !doMinify || doMinify.search(regFalse) == -1;
 			if (grunt.file.isDir(destPath)) {

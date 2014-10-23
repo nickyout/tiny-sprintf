@@ -2,13 +2,20 @@
 Tiny but complete.
 
 *   Implements sprintf based on the [php doc][php]. They have some nice examples. 
-*   Is only 550B minified (I guess that's even less gzipped). 
-*   By default only supports conversion type `s`, but that can be easily extended. I don't really see why you need these conversions when everything gets typecasted to string anyway. 
+*   Supports the same type conversions as php now.  
+*   Min build is 550B minified (only s), full build is 1051B (all)
+*   You can now make custom builds with Grunt, choosing what to include. 
 
 ## Install
 
 ```
 npm install tiny-sprintf
+```
+
+Then, in nodejs:
+
+```
+var sprintf = require('tiny-sprintf');
 ```
 
 ## What does it do
@@ -117,9 +124,33 @@ sprintf('%%', 1); // '%'
 sprintf('%T', 'abc'); // 'T'
 ```
 
-## Run tests
+## Grunt tasks
 
-Enter the sprintf directory, run `npm install` then run `npm test`. It uses [Grunt][grunt], so make sure you have that installed. That, or run [nodeunit][nunit] on the file `./test/sprintf.js` directly. 
+Enter the sprintf directory, run `npm install`. Make sure you have [Grunt][grunt] installed (globally: `npm install -g grunt-cli`). Run `grunt` for a quick overview. 
+
+### Custom build 
+
+Run `grunt build` to create a custom build. 
+
+Full format (where `[]` means optional): 
+```
+grunt build[:types][:destPath][:doMinify]
+```
+Optional arguments: 
+
+*   <code>types</code>
+    *   String, containig every character of the type conversions to include. 
+*   <code>destPath</code>
+    *   String, containing destination dir and, optionally, file name.
+    *   Defaults to <code>./dist/sprintf.custom.js</code>
+    *   Note: if destPath is a dir, the filename <code>sprintf.custom.js</code> will be used
+*   <code>doMinify</code>
+    *   String, where (case-insensitive) <code>"false"</code>, <code>"0"</code> and <code>"no"</code> means <code>false</code>. Everything else means <code>true</code>, and will cause the build to be minified. 
+    *   Default is <code>true</code>.
+
+### Run tests
+
+Run `grunt nodeunit` or `npm test`. Watch the results.  
 
 [php]: http://php.net/manual/en/function.sprintf.php "Php sprintf"
 [grunt]: http://gruntjs.com/getting-started "Grunt getting started"
