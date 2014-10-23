@@ -2,7 +2,7 @@
  * Typecasts to number, then returns hexadecimal string
  * @param {*} value
  * @param {Boolean} caps
- * @return {String}
+ * @returns {String|undefined}
  */
 module.exports = function(value, caps) {
 	value = (+value).toString(16);

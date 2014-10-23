@@ -4,6 +4,7 @@
  * Based on a preset bitshift action.
  * @param value
  * @param caps
+ * @returns {String|undefined}
  */
 module.exports = function(value, caps) {
 	if (~~((value>>17) +.5)) {

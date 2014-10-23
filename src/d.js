@@ -3,8 +3,8 @@
  * @param {*} value
  * @param {Boolean} caps
  * @param {String} [plusChar]
- * @returns {String}
+ * @returns {String|undefined}
  */
 module.exports = function(value, caps, plusChar) {
-	return caps ? '%D' : (plusChar || '') + (+value);
+	return caps ? undefined : (plusChar || '') + (+value);
 };

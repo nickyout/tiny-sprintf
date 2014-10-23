@@ -3,12 +3,12 @@ var sprintf = require('../dist/sprintf.all.js');
 module.exports = {
 	"type": function(test) {
 		test.equal(sprintf('%b', 5), '101', 'b converts to binary');
-		test.equal(sprintf('%B', 5), '%B', 'B does not work');
+		test.equal(sprintf('%B', 5), 'B', 'B does not work');
 		test.equal(sprintf('%c', 88), 'X', 'c converts to ascii char');
-		test.equal(sprintf('%C', 88), '%C', 'C does not work');
+		test.equal(sprintf('%C', 88), 'C', 'C does not work');
 		test.equal(sprintf('%d', 12), '12', "d converts to number");
 		test.equal(sprintf('%d', 'abc'), 'NaN', 'd converts non-number to NaN');
-		test.equal(sprintf('%D', 10), '%D', 'D does not work');
+		test.equal(sprintf('%D', 10), 'D', 'D does not work');
 		test.equal(sprintf('%e', '10'), '1e+1', 'e converts toExponential');
 		test.equal(sprintf('%E', '10'), '1E+1', 'E converts toExponential (caps)');
 		//test.equal(sprintf('%f', 13.4)) // depends on running context, meh
@@ -16,9 +16,9 @@ module.exports = {
 		test.equal(sprintf('%g', '-1000000'), '-1e+6', 'g converts toExponential at e+6 (negative)');
 		test.equal(sprintf('%G', '1000000'), '1E+6', 'G converts toExponential at e+6 (caps)');
 		test.equal(sprintf('%o', 255), '377', 'o converts to octal');
-		test.equal(sprintf('%O', 255), '%O', 'O does not work');
+		test.equal(sprintf('%O', 255), 'O', 'O does not work');
 		test.equal(sprintf('%s', 10), '10', "s converts to string");
-		test.equal(sprintf('%S', 'okay'), '%S', 'S does not work');
+		test.equal(sprintf('%S', 'okay'), 'S', 'S does not work');
 		test.equal(sprintf('%x', 255), 'ff', 'x converts to hexadecimal');
 		test.equal(sprintf('%X', 255), 'FF', 'X converts to hexadecimal (caps)');
 		test.done();

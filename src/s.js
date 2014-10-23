@@ -1,9 +1,9 @@
 /**
- * Returns value only if lowercase s.
+ * Returns string value only if lowercase s.
  * @param {*} value
  * @param {Boolean} caps
- * @returns {String}
+ * @returns {String|undefined}
  */
 module.exports = function(value, caps) {
-	return caps ? '%S' : value;
+	return caps ? undefined : value+'';
 };

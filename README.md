@@ -3,7 +3,7 @@ Tiny but complete.
 
 *   Implements sprintf based on the [php doc][php]. They have some nice examples. 
 *   Supports the same type conversions as php now.  
-*   Min build is 550B minified (only s), full build is 1051B (all)
+*   Min build (only s) is 577B minified, full build is 1081B minified
 *   You can now make custom builds with Grunt, choosing what to include. 
 
 ## Install
@@ -79,17 +79,25 @@ Explanation of elements:
     *   Does typecasting on the value before it is converted to string. Most of the times, you will probably just want to use `s`
 
 ## Adding conversion types
-Punch functions into the `sprintf` function under the same property as the type character. Expect args `value, plusChar` and return the value in the desired format. You don't have to convert it to string. 
+Punch functions into the `sprintf` function under the same property as the type character. Expect args `value, caps, plusChar` and return the value in the desired format, or `undefined` to reject. You don't have to convert the value to string (unless it is `undefined`).
+ 
+Arguments:
 
-For example, adding `d` (typecast to Number, add plus if desired) is like: 
+*   `{*} value` - the value for the match, which is an argument passed to sprintf
+*   `{Boolean} caps` - whether or not the type character was in caps (`/[A-Z]/`)
+*   `{String|undefined} plusChar` - the plus character, or `undefined`
+
+Return:
+ 
+*   `{*|undefined}` - if anything else but `undefined`, the match is accepted and the value is sprintf formatted. If `undefined`, the match is rejected, and escaped like any other 'invalid' character.  
+
+For example, the method of `d` (typecast to Number, add plus if desired, rejects caps) is: 
 
 ```javascript
-sprintf.d = function(value, plusChar) {
-    return (plusChar || '') + (+value);
+sprintf.d = function(value, caps, plusChar) {
+    return caps ? undefined : (plusChar || '') + (+value);
 };
 ```
-
-Most times, you will not need `plusChar`. 
 
 ## Examples
 ```javascript

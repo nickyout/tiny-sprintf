@@ -22,7 +22,7 @@ module.exports = function(grunt, ROOT) {
 		 * <code>"no"</code> to disable
 		 */
 		"execute": function(types, destPath, doMinify) {
-			types = types ? '' : types.toLowerCase();
+			types = types ? types.toLowerCase() : '';
 			destPath || (destPath = destFolderDefault);
 			doMinify = !doMinify || doMinify.search(regFalse) == -1;
 			if (grunt.file.isDir(destPath)) {
@@ -47,8 +47,10 @@ module.exports = function(grunt, ROOT) {
 			}
 			outString = grunt.file.read(srcPath).replace(srcReplace, typeStrings.join('\n'));
 			if (doMinify) {
+				outString = outString.replace(/\bundefined\b/g, 'u');
 				outString = UglifyJS.minify(outString, {
-					fromString: true
+					fromString: true,
+					unsafe: true
 				}).code;
 			}
 			grunt.file.write(destPath, outString);

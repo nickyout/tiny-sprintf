@@ -57,7 +57,8 @@
  * // Use arguments in order
  * sprintf("%1$s, %2$s, %2$s, %1$s!", 'left', 'right'); // 'left, right, right, left!'
  */
-var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
+var undefined,
+	r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 	s = function(str) {
 		var length = 'length',
 			substr = 'substr',
@@ -75,11 +76,12 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 				type = execMatch[7],
 				typeLowerCase = type.toLowerCase();
 
-			if (s[typeLowerCase]) {
-				// arg from index
-				if ((argIndex = execMatch[2]) && argIndex[(value = argIndex[length] - 1)] == "$") {
-					argIndex = argIndex[substr](0, value);
-				}
+			// arg from index
+			if ((argIndex = execMatch[2]) && argIndex[(padChar = argIndex[length] - 1)] == "$") {
+				argIndex = argIndex[substr](0, padChar);
+			}
+
+			if (s[typeLowerCase] && (value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar)) !== undefined) {
 
 				// pad char
 				if (padChar = execMatch[3]) {
@@ -97,8 +99,8 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 				if ((maxDist = execMatch[6]) && maxDist[0] == '.' && maxDist[substr](1)) {
 					maxDist = maxDist[substr](1);
 				}
-				value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar) + '';
 
+				value+='';
 				if (minDist) while (value[length] < minDist) {
 					value = leftAlign ? (value + padChar) : (padChar + value);
 				}
@@ -116,96 +118,13 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 	};
 
 /**
- * Typecasts to number, returns as byte string
- * @param {*} value
- * @param {Boolean} caps
- * @returns {String}
- */
-s.b=function(value, caps) {
-	return caps ? "%B" : (+value).toString(2);
-};
-/**
- * Typecasts to number, then returns the equivalent ASCII char code.
- * @param {*} value
- * @param {Boolean} caps
- * @returns {String}
- */
-s.c=function(value, caps) {
-	return caps ? "%C" : String.fromCharCode(+value);
-};
-/**
- * Typecasts to number, adds plus char if desired.
- * @param {*} value
- * @param {Boolean} caps
- * @param {String} [plusChar]
- * @returns {String}
- */
-s.d=function(value, caps, plusChar) {
-	return caps ? '%D' : (plusChar || '') + (+value);
-};
-/**
- * Typecasts to number, then return 'scientific notation' (toExponential)
- * @param {*} value
- * @param {Boolean} caps
- * @returns {string}
- */
-s.e=function(value, caps) {
-	value = (+value).toExponential();
-	return caps ? value.toUpperCase() : value;
-};
-/**
- * Typecasts to number, then returns locale aware format (toLocaleString).
- * @param {*} value
- * @returns {string}
- */
-s.f=function(value) {
-	return (+value).toLocaleString();
-};
-/**
- * Does f or e, depending on the size of value.
- * Between <code>131071</code> and <code>-131072</code>, f is done. Outside, e.
- * Based on a preset bitshift action.
- * @param value
- * @param caps
- */
-s.g=function(value, caps) {
-	if (~~((value>>17) +.5)) {
-		value = (+value).toExponential();
-		return caps ? value.toUpperCase() : value;
-	} else {
-		return (+value).toLocaleString();
-	}
-};
-/**
- * Typecasts to number, then returns octal string
- * @param {*} value
- * @param {Boolean} caps
- * @returns {String}
- */
-s.o=function(value, caps) {
-	return caps ? "%O" : (+value).toString(8);
-};
-/**
- * Returns value only if lowercase s.
+ * Returns string value only if lowercase s.
  * @param {*} value
  * @param {Boolean} caps
  * @returns {String}
  */
 s.s=function(value, caps) {
-	return caps ? '%S' : value;
-};
-/**
- * Typecasts to number, then returns hexadecimal string
- * @param {*} value
- * @param {Boolean} caps
- * @return {String}
- */
-s.x=function(value, caps) {
-	value = (+value).toString(16);
-	if (caps) {
-		value = value.toUpperCase();
-	}
-	return value
+	return caps ? undefined : value+'';
 };
 
 module.exports = s;

@@ -57,7 +57,8 @@
  * // Use arguments in order
  * sprintf("%1$s, %2$s, %2$s, %1$s!", 'left', 'right'); // 'left, right, right, left!'
  */
-var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
+var undefined,
+	r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 	s = function(str) {
 		var length = 'length',
 			substr = 'substr',
@@ -75,11 +76,12 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 				type = execMatch[7],
 				typeLowerCase = type.toLowerCase();
 
-			if (s[typeLowerCase]) {
-				// arg from index
-				if ((argIndex = execMatch[2]) && argIndex[(value = argIndex[length] - 1)] == "$") {
-					argIndex = argIndex[substr](0, value);
-				}
+			// arg from index
+			if ((argIndex = execMatch[2]) && argIndex[(padChar = argIndex[length] - 1)] == "$") {
+				argIndex = argIndex[substr](0, padChar);
+			}
+
+			if (s[typeLowerCase] && (value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar)) !== undefined) {
 
 				// pad char
 				if (padChar = execMatch[3]) {
@@ -97,8 +99,8 @@ var r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 				if ((maxDist = execMatch[6]) && maxDist[0] == '.' && maxDist[substr](1)) {
 					maxDist = maxDist[substr](1);
 				}
-				value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar) + '';
 
+				value+='';
 				if (minDist) while (value[length] < minDist) {
 					value = leftAlign ? (value + padChar) : (padChar + value);
 				}
