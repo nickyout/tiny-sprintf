@@ -123,7 +123,9 @@ sprintf("%-5s", 'a'); // 'a    '
 sprintf("%-5s", 'abcdefg'); // 'abcdefg'
 
 // Limit length
+sprintf("%.5s", 'a'); // 'a'
 sprintf("%.5s", 'abcdefg'); // 'cdefg'
+sprintf("%-.5s", 'a'); // 'a'
 sprintf("%-.5s", 'abcdefg'); // 'abcde'
 
 // Force exact size
