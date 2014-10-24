@@ -3,8 +3,8 @@ Tiny but complete.
 
 *   Implements sprintf based on the [php doc][php]. They have some nice examples. 
 *   Supports the same type conversions as php now.  
-*   Min build (only s) is 519B minified, full build is 1003B minified, bare build is 422B (only s, not extendable).
-*   You can now make custom builds with Grunt, choosing what to include.
+*   Min build (only `s`) is 519B minified, full build (all of php) is 989B minified, bare build is 422B (only `s`, not extendable).
+*   You can now make custom builds with Grunt, choosing what type conversions to include.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -14,7 +14,7 @@ Tiny but complete.
 - [Builds](#builds)
 - [What does it do](#what-does-it-do)
 - [Introduction](#introduction)
-  - [Format elements:](#format-elements)
+  - [Format elements](#format-elements)
   - [type conversions](#type-conversions)
 - [Adding conversion types](#adding-conversion-types)
 - [Grunt tasks](#grunt-tasks)
@@ -137,7 +137,7 @@ sprintf("%04s", 10); // "0010"
 sprintf("%'#4s", 10); // "##10"
 ```
 
-### Format elements:
+### Format elements
 
 ```javascript
 "%[+][index$]['padchar][-][minWidth][.maxWidth]type"
