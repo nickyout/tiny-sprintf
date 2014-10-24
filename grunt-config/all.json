@@ -4,6 +4,9 @@
 		"build:s:dist/sprintf.min.js",
 		"build:s:dist/sprintf.js:false",
 		"build::dist/sprintf.all.min.js",
-		"build::dist/sprintf.all.js:false"
+		"build::dist/sprintf.all.js:false",
+		"build:bare:dist/sprintf.bare.js:false",
+		"build:bare:dist/sprintf.bare.min.js",
+		"nodeunit"
 	]
 }

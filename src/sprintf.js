@@ -1,30 +1,5 @@
 /**
  * sprintf implementation. Get pretty indented monospace strings.
- * <p/>
- * The full format (where <code>[]</code> means optional element) is:</br>
- * <code>"%[+][index$]['padchar][-][minWidth][.maxWidth]type"</code>
- * <p/>
- * Explanation of elements:
- * <ol>
- *     <li><code>%</code> defines the start of a substring to interpret. </code>
- *     <li><code>+</code> means, when type is <code>d</code> and positive, prepend value with a <code>+</code> character</li>
- *     <li><code>index$</code> where index is an integer. Points to argument to use as value.
- *     Default is using an index, starting at 1, that is incremented with each replace done.
- *     Note that <code>0$</code> will point to the string to replace, and you probably don't want that.</li>
- *     <li><code>'padchar</code> where padchar is a single character of any kind. It must be preceded by a single quote
- *     (<code>'</code>). Define your string with double qoutes and everything will be fine. If padchar is zero
- *     (<code>0</code>), you can leave out the quote. The default is the space (<code>" "</code>) character</li>
- *     <li><code>-</code> means the value gets left aligned. Leave it out for right aligned, the default. Only makes
- *     sense with minWidth or maxWidth defined.</li>
- *     <li><code>minWidth</code> where minWidth is an integer. If the value (see index$) in string form is shorter than
- *     this, the rest gets filled up with the padchar. It's added on the left or right of value, depending on the
- *     alignment setting (see -).
- *     <li><code>.maxWidth</code> where maxWidth is an integer. If the value with padding is longer than this value,
- *     it gets cut off. Alignment is the same as with minWidth.
- *     <li><code>type</code> where type is a string that is either <code>s</code> or <code>d</code>. Does typecasting
- *     on the value before it is converted to string. <code>s</code> typecasts to string,
- *     <code>d</code> typecasts to number. Most of the times, you will probably just want to use <code>s</code></li>
- * </ol>
  * @param {String} str - the string to parse
  * @param {...*} args - arguments, used in order, or referenced by n$
  * @returns {String}
@@ -33,8 +8,6 @@
  * // Type casting...
  * sprintf('%s', 10); // '10'
  * sprintf('%s', 'abc'); // 'abc'
- * sprintf('%d', 12); // '12'
- * sprintf('%d', 'abc'); // 'NaN'
  *
  * // Escape anything else
  * sprintf('%%', 1); // '%'
@@ -58,61 +31,47 @@
  * sprintf("%1$s, %2$s, %2$s, %1$s!", 'left', 'right'); // 'left, right, right, left!'
  */
 var undefined,
+	/* method vars */
 	r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,
 	s = function(str) {
-		var length = 'length',
-			substr = 'substr',
-			lastIndex = 'lastIndex',
-			value,
+		var value,
 			index = 1,
 			execMatch,
-			argIndex,
-			padChar,
-			leftAlign,
-			minDist,
-			maxDist;
+			tempVar1,
+			tempVar2,
+			tempVar3;
 		while (execMatch = r.exec(str)) {
-			var plusChar = execMatch[1],
-				type = execMatch[7],
-				typeLowerCase = type.toLowerCase();
+			value = execMatch[7];
 
 			// arg from index
-			if ((argIndex = execMatch[2]) && argIndex[(padChar = argIndex[length] - 1)] == "$") {
-				argIndex = argIndex[substr](0, padChar);
+			if ((tempVar2 = execMatch[2]) && tempVar2[(tempVar1 = tempVar2.length - 1)] == "$") {
+				tempVar2 = tempVar2.substr(0, tempVar1);
 			}
 
-			if (s[typeLowerCase] && (value = s[typeLowerCase](arguments[argIndex || index], /[A-Z]/.test(type), plusChar)) !== undefined) {
+			if (s[tempVar1 = value.toLowerCase()] &&
+				(tempVar3 = s[tempVar1](arguments[tempVar2 || index], /[A-Z]/.test(value), execMatch[1])) !== undefined) {
+
+				value=''+tempVar3;
 
 				// pad char
-				if (padChar = execMatch[3]) {
-					if (padChar[0] == "'") {
-						padChar = padChar[1];
+				if (tempVar1 = execMatch[3]) {
+					if (tempVar1[0] == "'") {
+						tempVar1 = tempVar1[1];
 					}
 				} else {
-					padChar = ' ';
+					tempVar1 = ' ';
+				}
+				if (tempVar2 = execMatch[5]) while (value.length < tempVar2) {
+					value = execMatch[4] ? (value + tempVar1) : (tempVar1 + value);
 				}
 
-				leftAlign = execMatch[4];
-				minDist = execMatch[5];
-
-				// cutoff
-				if ((maxDist = execMatch[6]) && maxDist[0] == '.' && maxDist[substr](1)) {
-					maxDist = maxDist[substr](1);
-				}
-
-				value+='';
-				if (minDist) while (value[length] < minDist) {
-					value = leftAlign ? (value + padChar) : (padChar + value);
-				}
-				if (maxDist && value[length] > maxDist) {
-					value = leftAlign ? value[substr](0, maxDist) : value[substr](value[length] - maxDist);
+				if ((tempVar1 = execMatch[6] && execMatch[6].substr(1)) && value.length > tempVar1) {
+					value = execMatch[4] ? value.substr(0, tempVar1) : value.substr(value.length - tempVar1);
 				}
 				index++;
-			} else {
-				value = type;
 			}
-			str = str[substr](0, plusChar = execMatch.index) + value + str[substr](r[lastIndex]);
-			r[lastIndex] = value[length] + plusChar;
+			str = str.substr(0, tempVar1 = execMatch.index) + value + str.substr(r.lastIndex);
+			r.lastIndex = value.length + tempVar1;
 		}
 		return str;
 	};
