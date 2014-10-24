@@ -1,21 +1,27 @@
 var path = require('path'),
 	fs = require('fs'),
-	UglifyJS = require("uglify-js"),
-	typeReplace = /module\.exports\s*=\s*/,
-	regFalse = /^(false|0|no)$/i,
-	srcReplace = "/* type entry */",
-	srcPath = 'src/sprintf.js',
-	srcPathBare = 'src/sprintf.bare.js',
-	srcDoc = 'src/jsdoc.js',
-	typeGlobPath = 'src/?.js',
-	destFolderDefault = 'dist',
-	destFileNameDefault = 'sprintf.custom.js';
+	UglifyJS = require("uglify-js");
 
-var preMangleVarReplace = "/* method vars */";
+var typeReplace = /module\.exports\s*=\s*/,
+	regFalse = /^(false|0|no)$/i;
+
+var tokens = {
+	types: "/* type entry */",
+	methodVars: "/* method vars */"
+};
+
+var paths = {
+	src: 'src/sprintf.js',
+	srcBare: 'src/sprintf.bare.js',
+	srcDoc: 'src/jsdoc.js',
+	typeGlob: 'src/?.js',
+	destFolderDefault: 'dist',
+	destFileDefault: 'sprintf.custom.js'
+};
 
 module.exports = function(grunt, ROOT) {
 	return {
-		"description": "Build "+destFileNameDefault+" (optional args :[types|bare]:[destPath]:[doMinify])",
+		"description": "Build "+paths.destFileDefault+" (optional args :[types|bare]:[destPath]:[doMinify])",
 		/**
 		 * Build script. Run with <code>grunt build</code> to execute.
 		 * @param {String} [types="(all)"] - string containing all type conversions you want to include.
@@ -27,11 +33,11 @@ module.exports = function(grunt, ROOT) {
 		 */
 		"execute": function(types, destPath, doMinify) {
 			types = types ? types.toLowerCase() : '';
-			destPath || (destPath = destFolderDefault);
+			destPath || (destPath = paths.destFolderDefault);
 			doMinify = !doMinify || doMinify.search(regFalse) == -1;
 			if (grunt.file.isDir(destPath)) {
 				// If name does not have an ext, append 'sprintf.custom.js'
-				destPath = path.resolve(destPath, destFileNameDefault);
+				destPath = path.resolve(destPath, paths.destFileDefault);
 			}
 
 			var highlightColor = ROOT.style.color,
@@ -43,10 +49,10 @@ module.exports = function(grunt, ROOT) {
 				arrTypeSrc = [];
 				arrTypeChars = [];
 				readTypeConversions(grunt, types, arrTypeChars, arrTypeSrc);
-				outString = grunt.file.read(srcPath).replace(srcReplace, arrTypeSrc.join('\n'));
+				outString = grunt.file.read(paths.src).replace(tokens.types, arrTypeSrc.join('\n'));
 			} else {
 				arrTypeChars = ['s'];
-				outString = grunt.file.read(srcPathBare);
+				outString = grunt.file.read(paths.srcBare);
 			}
 			if (doMinify) {
 				outString = outString.replace(/\bundefined\b/g, 'u');
@@ -54,6 +60,8 @@ module.exports = function(grunt, ROOT) {
 				outString = UglifyJS.minify(outString, {
 					fromString: true
 				}).code;
+			} else {
+				outString = grunt.file.read(paths.srcDoc) + outString;
 			}
 			grunt.file.write(destPath, outString);
 			grunt.log.writeln(resultMessage(types, arrTypeChars, destPath, doMinify, highlightColor));
@@ -82,7 +90,7 @@ function preMangle(src, grunt, h) {
 		varName,
 		reg;
 
-	if (src.indexOf(preMangleVarReplace) === -1) {
+	if (src.indexOf(tokens.methodVars) === -1) {
 		// Don't, it would destroy the source
 		grunt && grunt.log.writeln("   Pre-mangle aborted (no method var token)"[h]);
 		return src;
@@ -110,7 +118,7 @@ function preMangle(src, grunt, h) {
 			}
 		}
 	}
-	src = src.replace(preMangleVarReplace, vars.join('\n'));
+	src = src.replace(tokens.methodVars, vars.join('\n'));
 	return src;
 }
 
@@ -124,7 +132,7 @@ function preMangle(src, grunt, h) {
  * @param {Array} destSrcArray
  */
 function readTypeConversions(grunt, typesToInclude, destCharArray, destSrcArray) {
-	var allPaths = grunt.file.expand(typeGlobPath),
+	var allPaths = grunt.file.expand(paths.typeGlob),
 		typePath,
 		typeChar,
 		i = 0;
