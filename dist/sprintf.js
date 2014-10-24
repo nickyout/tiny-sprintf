@@ -3,7 +3,6 @@
  * @param {String} str - the string to parse
  * @param {...*} args - arguments, used in order, or referenced by n$
  * @returns {String}
- * @method module:h-util.sprintf
  * @example
  * // Type casting...
  * sprintf('%s', 10); // '10'
@@ -30,6 +29,7 @@
  * // Use arguments in order
  * sprintf("%1$s, %2$s, %2$s, %1$s!", 'left', 'right'); // 'left, right, right, left!'
  */
+
 var undefined,
 	/* method vars */
 	r = /%(\+)?(\d+\$)?(0|'.)?(-)?(\d+)?(\.\d+)?(.)/g,

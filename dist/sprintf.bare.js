@@ -3,7 +3,6 @@
  * @param {String} str - the string to parse
  * @param {...*} args - arguments, used in order, or referenced by n$
  * @returns {String}
- * @method module:h-util.sprintf
  * @example
  * // Type casting...
  * sprintf('%s', 10); // '10'
