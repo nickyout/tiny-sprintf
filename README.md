@@ -165,7 +165,7 @@ sprintf("%'#4s", 10); // "##10"
     *   Note: only makes sense with `minWidth` or `maxWidth` defined.
 6.  `minWidth` 
     *   where minWidth is an integer. 
-    *   If the value (see `index$`) in string form is shorter than this, the rest gets filled up with the padchar. It's added on the left or right of value, depending on the alignment setting (see `-`).
+    *   If the value in string form is shorter than this, the rest gets filled up with the padchar. It's added on the left or right of value, depending on the alignment setting (see `-`).
 7.  `.maxWidth` 
     *   where maxWidth is an integer. 
     *   If the value with padding is longer than this value, it gets cut off. Alignment is the same as with minWidth.
@@ -197,47 +197,47 @@ Explanation of type conversions:
     *   typecast to number, then convert to binary string
     *   Example: `42` becomes `"101010"`
     *   Uses `Number.prototype.toString(2)`
-    *   Using caps (`B`) does not work. 
+    *   Caps (`B`) does not work. 
 *   `c` 
     *   typecast to number, then convert to ASCII equivalent char. 
     *   Example: `88` becomes `"X"` (see [ASCII table][ascii] dec to char)
     *   Uses `String.fromCharCode()`
-    *   Using caps (`C`) does not work. 
+    *   Caps (`C`) does not work. 
 *   `d` 
     *   typecast to number
     *   Example: `"abc"` becomes `"NaN"`
-    *   Using caps (`D`) does not work. 
+    *   Caps (`D`) does not work. 
 *   `e`
     *   typecast to number, then convert to scientific format. 
     *   Example: `10000` becomes `"1e+4"`
     *   Uses `Number.prototype.toExponential()`
-    *   Using caps (`E`) will turn the `e` in the string to `E` 
+    *   Caps (`E`) will turn the `e` in the string to `E` 
 *   `f`
     *   typecast to number, then use a locale-sensitive notation.
     *   Example: `1234567.89` _may_ turn into `"1.234.567,89"` depending on where and what runs the javascript. Node does not seem to do anything special. 
     *   Uses `Number.prototype.toLocaleString()`
-    *   Using caps (`F`) will do the same.  
+    *   Caps (`F`) will do the same.  
 *   `g`
     *   checks which between `e` and `f` which conversion yields the shortest string, and outputs that string. When equal in length, `f` is favored. 
     *   Example: `100000000` is shorter as `"1e+8"`, but `100000001` is not and (_maybe_) becomes `"100,000,001"`. 
-    *   Using caps (`G`) will use `E` and `F` instead.  
+    *   Caps (`G`) will use `E` and `F` instead.  
 *   `o`
     *   typecast to number, then convert to octal number.
     *   Example: `64` becomes `"100"`.
     *   Uses `Number.prototype.toString(8)`
-    *   Using caps (`O`) will not work.
+    *   Caps (`O`) will not work.
 *   `s`
     *   typecast to string. 
     *   Note: considering the output of sprintf is a string, this essentially applies to every value. 
-    *   Using caps (`S`) will not work.
+    *   Caps (`S`) will not work.
 *   `x`
     *   typecast to number, then convert to hexadecimal number.
     *   Example: `255` becomes `"ff"`
     *   Uses `Number.prototype.toString(16)`
-    *   Using caps (`X`) will turn any letters in the string to upper case (`"ff"` becomes `"FF"`). 
+    *   Caps (`X`) will turn any letters in the string to upper case (`"ff"` becomes `"FF"`). 
 
 ## Adding conversion types
-Punch functions into the `sprintf` function under the same property as the type character. Lowercase characters only, which will receive both lower- and uppercase. Expect args `value, caps, plusChar` and return the value in the desired format, or `undefined` to reject. You don't have to convert the value to string (unless it is `undefined`).
+Punch functions into the `sprintf` function under the same property as the type character you wish to use. Lowercase characters only, which will receive both lower- and uppercase. Expect args `value, caps, plusChar` and return the value in the desired format, or `undefined` to reject. You don't have to convert the value to string (unless it is `undefined`).
  
 Arguments:
 
