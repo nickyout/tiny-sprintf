@@ -56,14 +56,6 @@ vendor/
 cache/*
 .settings/org.eclipse.core.resources.prefs
 .pydevproject
-bower_components/
-grunt_bower/
 node_modules/*
-proxy.php
 doc/
-dist/js/all.debug.js
-
-#modules to include
-src/locale/polib.pyc
-!node_modules/h-*
-int/report
+dist/sprintf.custom.js
