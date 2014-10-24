@@ -46,7 +46,7 @@ Currently, the collection consists of:
     *   Extendible (type conversions can be added at runtime)
     *   Useful for small builds with custom type conversions 
     *   Paths:
-        *   __(2863B)__ `require("tiny-sprintf/dist/sprintf")` same as `require("tiny-sprintf")`
+        *   __(2358B)__ `require("tiny-sprintf/dist/sprintf")` same as `require("tiny-sprintf")`
         *   __(519B)__ `require("tiny-sprintf/dist/sprintf.min")` 
 *   `sprintf.all`
     *   Type conversions: `bcdeEfFgGosxX`
